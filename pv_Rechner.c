@@ -20,11 +20,20 @@ Version:		1
 int main(void) {
 	float kwhProTagUndTageImMonat[12][2] = { {0.52, 31}, {1.13, 28}, {2.23, 31}, {3.55, 30}, {4.67, 31}, {5.44, 30}, {4.82, 31}, {4.34, 31}, {2.79, 30}, {1.49, 31}, {0.67, 30}, {0.40, 31} };
 	float mittlererkwhWertMonat[12];
+	float anzahlMonate = 12.0; 
 
+	// Berechnung der mittleren monatlichen Strahlung + Ausgabe 
 	for (int i = 0; i < 12; i++) {
 		mittlererkwhWertMonat[i] = kwhProTagUndTageImMonat[i][0] * kwhProTagUndTageImMonat[i][1];
 	}
 	for (int i = 0; i < 12; i++) {
 		printf("Mittlerer monatlicher Kwh Wert: %.2f\n", mittlererkwhWertMonat[i]); 
 	}
+	// Berechnung des Jahresmittels + Ausgabe 
+	float gesamtkwhJahr = 0; 
+	for (int i = 0; i < 12; i++) {
+		gesamtkwhJahr += mittlererkwhWertMonat[i]; 
+	}
+	float monatlichesMittel = gesamtkwhJahr / anzahlMonate; 
+	printf("Monatliches Mittel: %.2f\n", monatlichesMittel); 
 }
