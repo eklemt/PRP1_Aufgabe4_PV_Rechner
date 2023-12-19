@@ -25,7 +25,7 @@ void inDateiSpeichern();
 float mittelBerechnen(float mittlererkwhWertMonat[][12], float kwhProTagUndTageImMonat[][12], char monate[][12]);
 
 int main(void) {
-	
+
 	float anzahlMonate = 12.0;
 	float gesamtkwhJahr = 0;
 	float mittlererkwhWertMonat[12];
@@ -60,58 +60,85 @@ int main(void) {
 
 
 
-	#ifdef ausgabe_berechnung
-		// Berechnung der mittleren monatlichen Strahlung + Ausgabe für Hamburg
-		printf("Mittlerer monatlicher Kwh Wert:\n");
+#ifdef ausgabe_berechnung
+	// Berechnung der mittleren monatlichen Strahlung + Ausgabe für Hamburg
+	printf("Mittlerer monatlicher Kwh Wert horizontal:\n");
 
-		// Berechnung der mittleren monatlichen Strahlung + Ausgabe 
-		for (int i = 0; i < 12; i++) {
-			mittlererkwhWertMonat[i] = kwhProTagUndTageImMonat[i][0] * kwhProTagUndTageImMonat[i][1];
-			printf("%s: %.2f\n", monate[i], mittlererkwhWertMonat[i]);
-		}
-		
-
-		printf("\n\n");
-		// Berechnung des Jahresmittels + Ausgabe 
-		for (int i = 0; i < 12; i++) {
-			gesamtkwhJahr += mittlererkwhWertMonat[i];
-		}
-		float jahresmittel = gesamtkwhJahr / anzahlMonate;
-		printf("Jahresmittel: %.2f kWh\n", jahresmittel);
+	// Berechnung der mittleren monatlichen Strahlung + Ausgabe 
+	for (int i = 0; i < 12; i++) {
+		mittlererkwhWertMonat[i] = kwhProTagUndTageImMonat[i][0] * kwhProTagUndTageImMonat[i][1];
+		printf("%s: %.2f\n", monate[i], mittlererkwhWertMonat[i]);
+	}
 
 
-		//Berechnung von strahlung mit korrekturfaktor 30Grad 
-		float korrigierteMonatlicheKWH[12];
-		for (int i = 0; i<12; i++) {
-			korrigierteMonatlicheKWH[i] = kwhProTagUndTageImMonat[i][0] * neigungskorrekturfaktoren[0][i];
-		}
-		for (int i = 0; i < 12; i++) {
-			//korrigierteMonatlicheKWH[i] = korrigierteMonatlicheKWH * kwhProTagUndTageImMonat[i][1];
-		}
-			
+	printf("\n\n");
+	// Berechnung des Jahresmittels + Ausgabe 
+	for (int i = 0; i < 12; i++) {
+		gesamtkwhJahr += mittlererkwhWertMonat[i];
+	}
+	float jahresmittel = gesamtkwhJahr / anzahlMonate;
+	printf("Jahresmittel: %.2f kWh\n", jahresmittel);
+
+	printf("\n\n");
+	//Berechnung von strahlung mit korrekturfaktor 30Grad 
+	printf("Mittlerer monatlicher Kwh Wert 30Grad:\n");
+	float korrigierteMonatlicheKWH[12];
+	for (int i = 0; i < 12; i++) {
+		korrigierteMonatlicheKWH[i] = kwhProTagUndTageImMonat[i][0] * neigungskorrekturfaktoren[0][i];
+	}
+	for (int i = 0; i < 12; i++) {
+		mittlererkwhWertMonat[i] = korrigierteMonatlicheKWH[i] * kwhProTagUndTageImMonat[i][1];
+		printf("%s: %.2f\n", monate[i], mittlererkwhWertMonat[i]);
+	}
+	printf("\n\n");
+	gesamtkwhJahr = 0; 
+	jahresmittel = 0; 
+	// Berechnung des Jahresmittels + Ausgabe 
+	for (int i = 0; i < 12; i++) {
+		gesamtkwhJahr += mittlererkwhWertMonat[i];
+	}
+	jahresmittel = gesamtkwhJahr / anzahlMonate;
+	printf("Jahresmittel: %.2f kWh\n", jahresmittel);
+	printf("\n\n");
+
+	//Berechnung von strahlung mit korrekturfaktor 60Grad 
+	printf("Mittlerer monatlicher Kwh Wert 60Grad:\n");
+	for (int i = 0; i < 12; i++) {
+		korrigierteMonatlicheKWH[i] = kwhProTagUndTageImMonat[i][0] * neigungskorrekturfaktoren[2][i];
+	}
+	for (int i = 0; i < 12; i++) {
+		mittlererkwhWertMonat[i] = korrigierteMonatlicheKWH[i] * kwhProTagUndTageImMonat[i][1];
+		printf("%s: %.2f\n", monate[i], mittlererkwhWertMonat[i]);
+	}
+	printf("\n\n");
+	gesamtkwhJahr = 0;
+	jahresmittel = 0;
+	// Berechnung des Jahresmittels + Ausgabe 
+	for (int i = 0; i < 12; i++) {
+		gesamtkwhJahr += mittlererkwhWertMonat[i];
+	}
+	jahresmittel = gesamtkwhJahr / anzahlMonate;
+	printf("Jahresmittel: %.2f kWh\n", jahresmittel);
+
+#else
+	printf("andere option\n");
+	int ort = NULL;
+	int ausrichtung = NULL;
+	int spitzenleistung = NULL;
+
+	ort = einlesenEinerZahl("Bitte wähle einen Ort aus? (1=Berlin, 2=Kassel, 3=Hamburg)", 1, 3);
+	ausrichtung = einlesenEinerZahl("Wie wird die PV-Anlage ausgerichtet? (1=horizontal, 2=Sued 30, 3=Sued 45, 4=Sued 60)", 1, 4);
+	spitzenleistung = einlesenEinerZahl("Wie gross ist die Spitzenleisung (kWp)? (1-30)", 1, 30);
+
+	printf("%d %d %d", ort, spitzenleistung, ausrichtung);
+
+	//user eingabe (Zahl) auf wert zu berechnugn aus werte-array zuordnen
+	//funktion aufrufen, werte von user als berechnugnsparameter übergeben
 
 
 
-		inDateiSpeichern();
-	#else
-		printf("andere option\n");
-		int ort = NULL;
-		int ausrichtung = NULL;
-		int spitzenleistung = NULL;
+#endif
 
-		ort = einlesenEinerZahl("Bitte wähle einen Ort aus? (1=Berlin, 2=Kassel, 3=Hamburg)", 1, 3);
-		ausrichtung = einlesenEinerZahl("Wie wird die PV-Anlage ausgerichtet? (1=horizontal, 2=Sued 30, 3=Sued 45, 4=Sued 60)", 1, 4);
-		spitzenleistung = einlesenEinerZahl("Wie gross ist die Spitzenleisung (kWp)? (1-30)", 1, 30);
-
-		printf("%d %d %d", ort, spitzenleistung, ausrichtung);
-
-		//user eingabe (Zahl) auf wert zu berechnugn aus werte-array zuordnen
-		//funktion aufrufen, werte von user als berechnugnsparameter übergeben
-
-
-
-	#endif
-	
 }
 
 
@@ -119,7 +146,7 @@ float mittelBerechnen(float* zeiger_array[12], float kwhProTagUndTageImMonat[][1
 	float a = *zeiger_array[12];
 
 	for (int i = 0; i < 12; i++) {
-		
+
 		a = kwhProTagUndTageImMonat[i][0] * kwhProTagUndTageImMonat[i][1];
 		zeiger_array++;
 	}
@@ -159,6 +186,7 @@ short einlesenEinerZahl( // Funktion, um eine Zahl einzulesen
 	return eingelesenerWert;
 }
 
+/*
 void inDateiSpeichern() { // Inhalt des arrays in .txt-Datei abspeichern
 	char dateiname[] = "kwh_werte.txt";
 	FILE* datei = fopen(dateiname, "w");
@@ -172,3 +200,4 @@ void inDateiSpeichern() { // Inhalt des arrays in .txt-Datei abspeichern
 
 	fclose(datei);
 }
+*/
