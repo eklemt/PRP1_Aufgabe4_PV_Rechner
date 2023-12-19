@@ -34,6 +34,16 @@ int main(void) {
 	//aufgabe 2-2
 	float kwhProTagUndTageImMonat[12][2] = { {0.52, 31}, {1.13, 28}, {2.23, 31}, {3.55, 30}, {4.67, 31}, {5.44, 30}, {4.82, 31}, {4.34, 31}, {2.79, 30}, {1.49, 31}, {0.67, 30}, {0.40, 31} };
 	//aufgabe 2-3
+	float neigungskorrekturfaktoren[][12] = {
+		//sued 30
+		{1.44, 1.40, 1.17, 1.08, 1.0, 0.96, 0.97, 1.03, 1.17, 1.30, 1.47, 1.42},
+		// sued 45
+		{1.57, 1.50, 1.19, 1.05, 0.94, 0.90, 0.91, 1.00, 1.18, 1.37, 1.61, 1.55},
+		// sued 60
+		{1.63, 1.54, 1.15, 0.98, 0.85, 0.81, 0.83, 0.92, 1.14, 1.38, 1.68, 1.61} };
+
+
+
 	//array das bestrahlungswinkel enthält
 	float monatlichesMittelJeStadt[][12] = {
 		//hamburg (0)
@@ -47,6 +57,7 @@ int main(void) {
 		//freiburg (4)
 		{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
 	};
+
 
 
 	#ifdef ausgabe_berechnung
@@ -67,6 +78,19 @@ int main(void) {
 		}
 		float jahresmittel = gesamtkwhJahr / anzahlMonate;
 		printf("Jahresmittel: %.2f kWh\n", jahresmittel);
+
+
+		//Berechnung von strahlung mit korrekturfaktor 30Grad 
+		float korrigierteMonatlicheKWH[12];
+		for (int i = 0; i<12; i++) {
+			korrigierteMonatlicheKWH[i] = kwhProTagUndTageImMonat[i][0] * neigungskorrekturfaktoren[0][i];
+		}
+		for (int i = 0; i < 12; i++) {
+			//korrigierteMonatlicheKWH[i] = korrigierteMonatlicheKWH * kwhProTagUndTageImMonat[i][1];
+		}
+			
+
+
 
 		inDateiSpeichern();
 	#else
