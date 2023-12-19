@@ -45,17 +45,17 @@ int main(void) {
 
 
 	//array das bestrahlungswinkel enthält
-	float monatlichesMittelJeStadt[][12] = {
+	float monatlichesMittelJeStadt[][13] = {
 		//hamburg (0)
 		{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
 		//berlin (1)
-		{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
+		{19, 33, 75, 128, 160, 166, 158, 134, 94, 51, 26, 15, 1059},
 		//kassel (2)
-		{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
+		{20, 34, 77, 123, 150, 162, 154, 132, 90, 52, 25, 16, 1037},
 		//stuttgart (3)
-		{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12},
+		{29, 45, 85, 130, 153, 174, 164, 140, 99, 62, 36, 24, 1139},
 		//freiburg (4)
-		{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12}
+		{29, 45, 84, 129, 153, 172, 166, 141, 104, 63, 38, 24, 1150}
 	};
 
 
@@ -67,11 +67,10 @@ int main(void) {
 	// Berechnung der mittleren monatlichen Strahlung + Ausgabe 
 	for (int i = 0; i < 12; i++) {
 		mittlererkwhWertMonat[i] = kwhProTagUndTageImMonat[i][0] * kwhProTagUndTageImMonat[i][1];
-		printf("%s: %.2f\n", monate[i], mittlererkwhWertMonat[i]);
+		printf("%s: %.2f |", monate[i], mittlererkwhWertMonat[i]);
 	}
+	printf("\n");
 
-
-	printf("\n\n");
 	// Berechnung des Jahresmittels + Ausgabe 
 	for (int i = 0; i < 12; i++) {
 		gesamtkwhJahr += mittlererkwhWertMonat[i];
@@ -79,7 +78,7 @@ int main(void) {
 	float jahresmittel = gesamtkwhJahr / anzahlMonate;
 	printf("Jahresmittel: %.2f kWh\n", jahresmittel);
 
-	printf("\n\n");
+	printf("\n");
 	//Berechnung von strahlung mit korrekturfaktor 30Grad 
 	printf("Mittlerer monatlicher Kwh Wert 30Grad:\n");
 	float korrigierteMonatlicheKWH[12];
@@ -88,9 +87,9 @@ int main(void) {
 	}
 	for (int i = 0; i < 12; i++) {
 		mittlererkwhWertMonat[i] = korrigierteMonatlicheKWH[i] * kwhProTagUndTageImMonat[i][1];
-		printf("%s: %.2f\n", monate[i], mittlererkwhWertMonat[i]);
+		printf("%s: %.2f |", monate[i], mittlererkwhWertMonat[i]);
 	}
-	printf("\n\n");
+	printf("\n");
 	gesamtkwhJahr = 0; 
 	jahresmittel = 0; 
 	// Berechnung des Jahresmittels + Ausgabe 
@@ -99,7 +98,7 @@ int main(void) {
 	}
 	jahresmittel = gesamtkwhJahr / anzahlMonate;
 	printf("Jahresmittel: %.2f kWh\n", jahresmittel);
-	printf("\n\n");
+	printf("\n");
 
 	//Berechnung von strahlung mit korrekturfaktor 60Grad 
 	printf("Mittlerer monatlicher Kwh Wert 60Grad:\n");
@@ -108,9 +107,9 @@ int main(void) {
 	}
 	for (int i = 0; i < 12; i++) {
 		mittlererkwhWertMonat[i] = korrigierteMonatlicheKWH[i] * kwhProTagUndTageImMonat[i][1];
-		printf("%s: %.2f\n", monate[i], mittlererkwhWertMonat[i]);
+		printf("%s: %.2f |", monate[i], mittlererkwhWertMonat[i]);
 	}
-	printf("\n\n");
+	printf("\n");
 	gesamtkwhJahr = 0;
 	jahresmittel = 0;
 	// Berechnung des Jahresmittels + Ausgabe 
@@ -120,15 +119,28 @@ int main(void) {
 	jahresmittel = gesamtkwhJahr / anzahlMonate;
 	printf("Jahresmittel: %.2f kWh\n", jahresmittel);
 
+	printf("\n");
+	char städtenamen[5][100] = { "Hamburg", "Berlin", "Kassel", "Stuttgart", "Freiburg" }; 
+	// Ausgaben für andere Städte
+	for (int i = 1; i < 5; i++) {
+		printf("Ausgabe fuer %s", städtenamen[i]);
+		printf("Monatliches Mittel:"); 
+		for (int j = 0; j < 12; j++) {
+			printf("%s: %.2f |", monate[j], monatlichesMittelJeStadt[i][j]);
+		}
+		printf("\n"); 
+		printf("Jahresmittel: %.2f kWh\n", monatlichesMittelJeStadt[i][12]/12);
+		printf("\n"); 
+	}
 #else
 	printf("andere option\n");
 	int ort = NULL;
 	int ausrichtung = NULL;
 	int spitzenleistung = NULL;
 
-	ort = einlesenEinerZahl("Bitte wähle einen Ort aus? (1=Berlin, 2=Kassel, 3=Hamburg)", 1, 3);
+	ort = einlesenEinerZahl("Bitte wähle einen Ort aus? (1=Hamburg, 2=Berlin, 3=Kassel, 4=Stuttgart, 5=Freiburg)", 1, 5);
 	ausrichtung = einlesenEinerZahl("Wie wird die PV-Anlage ausgerichtet? (1=horizontal, 2=Sued 30, 3=Sued 45, 4=Sued 60)", 1, 4);
-	spitzenleistung = einlesenEinerZahl("Wie gross ist die Spitzenleisung (kWp)? (1-30)", 1, 30);
+	spitzenleistung = einlesenEinerZahl("Wie gross ist die Spitzenleistung (kWp)? (1-30)", 1, 30);
 
 	printf("%d %d %d", ort, spitzenleistung, ausrichtung);
 
